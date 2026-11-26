@@ -3,80 +3,125 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Haco Master Admin Panel</title>
+  <title>HANA Master Admin Panel</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Login Lock Screen -->
+  <!-- Login Screen -->
   <div id="loginOverlay">
     <div class="login-box">
-      <h2 style="margin-top:0; color:#fff;">❖ <span style="color:#ec4899;">HACO</span> ADMIN</h2>
-      <p style="color:#64748b; font-size:13px; margin-bottom:20px;">Admin Control Panel mein Login karein</p>
-      <input type="text" id="adminUser" placeholder="Admin Username (admin)">
-      <input type="password" id="adminPass" placeholder="Password (haco@2026)">
+      <h2 style="margin-top:0; color:#fff;">❖ <span style="color:#ec4899;">HANA</span> ADMIN</h2>
+      <p style="color:#64748b; font-size:13px; margin-bottom:20px;">Master Admin Login</p>
+      <input type="text" id="adminUser" placeholder="Admin ID">
+      <input type="password" id="adminPass" placeholder="Password">
       <button class="btn btn-pink" onclick="checkLogin()" style="width:100%; padding:11px; font-size:14px;">Login</button>
-      <p id="loginErr" style="color:#ef4444; font-size:12px; margin-top:10px; display:none;">Galat Username ya Password!</p>
+      <p id="loginErr" style="color:#ef4444; font-size:12px; margin-top:10px; display:none;">Invalid Admin ID or Password!</p>
     </div>
   </div>
 
-  <!-- Sidebar Menu -->
-  <div class="sidebar">
-    <div class="brand">❖ <span>HACO</span> ADMIN</div>
-    
+  <!-- Left Vertical Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="brand">
+      <div>❖ <span>HANA</span></div>
+      <button class="hamburger" onclick="toggleSidebar()" style="font-size:14px; padding:3px 8px;">✕</button>
+    </div>
+
+    <div class="menu-label">Dashboard</div>
+    <div class="menu-item active" onclick="openSection('users', 'all', this)">📊 Dashboard / Users</div>
+
     <div class="menu-label">User Management</div>
-    <div class="menu-item active" onclick="showTab('users', this)">👥 Users (Real/Bot)</div>
-    <div class="menu-item" onclick="showTab('plans', this)">💎 Coin Plans</div>
-    
+    <div class="menu-item" onclick="openSection('users', 'Real', this)">👤 Real Users</div>
+    <div class="menu-item" onclick="openSection('users', 'Fake', this)">🤖 Fake / Bot Users</div>
+    <div class="menu-item" onclick="openSection('users', 'Banned', this)">🚫 Banned IDs</div>
+    <div class="menu-item" onclick="openSection('users', 'Blacklist', this)">⛔ Blacklist IDs</div>
+    <div class="menu-item" onclick="openSection('generic', 'CoinSeller', this)">💰 Coin Seller</div>
+
+    <div class="menu-label">Financial Management</div>
+    <div class="menu-item" onclick="openSection('plans', '', this)">💎 Coin Plans</div>
+    <div class="menu-item" onclick="openSection('generic', 'PlanHistory', this)">🕒 Plan History</div>
+    <div class="menu-item" onclick="openSection('generic', 'UserRedeem', this)">💸 User Redeem</div>
+    <div class="menu-item" onclick="openSection('generic', 'Currency', this)">💲 Currency</div>
+
+    <div class="menu-label">Gaming</div>
+    <div class="menu-item" onclick="openSection('generic', 'Game', this)">🎮 Game</div>
+    <div class="menu-item" onclick="openSection('generic', 'GameHistory', this)">#️⃣ Game History</div>
+
     <div class="menu-label">Engagement</div>
-    <div class="menu-item" onclick="showTab('gifts', this)">🎁 Gifts & Value</div>
-    <div class="menu-item" onclick="showTab('engagement', this)">😊 Reactions & Broadcast</div>
-    
+    <div class="menu-item" onclick="openSection('gifts', '', this)">🎁 Gift & Category</div>
+    <div class="menu-item" onclick="openSection('engagement', 'Reaction', this)">😊 Reaction</div>
+    <div class="menu-item" onclick="openSection('engagement', 'QuickMsg', this)">💬 Suggested Message</div>
+
     <div class="menu-label">Content Management</div>
-    <div class="menu-item" onclick="showTab('banners', this)">🖼️ Banners</div>
-    <div class="menu-item" onclick="showTab('themes', this)">🎨 Room Themes</div>
-    
+    <div class="menu-item" onclick="openSection('banners', '', this)">🖼️ Banner</div>
+    <div class="menu-item" onclick="openSection('engagement', 'Broadcast', this)">📡 Broadcast</div>
+    <div class="menu-item" onclick="openSection('themes', '', this)">🎨 Room Theme</div>
+    <div class="menu-item" onclick="openSection('generic', 'Song', this)">🎵 Song</div>
+    <div class="menu-item" onclick="openSection('generic', 'Hashtag', this)">#️⃣ Hashtag</div>
+    <div class="menu-item" onclick="openSection('generic', 'Post', this)">📝 Post</div>
+    <div class="menu-item" onclick="openSection('generic', 'Video', this)">🎬 Video</div>
+
     <div class="menu-label">Store & Features</div>
-    <div class="menu-item" onclick="showTab('store', this)">🚗 Entry & Frames</div>
-    
+    <div class="menu-item" onclick="openSection('store', 'EntryEffect', this)">🚗 Entry Effect</div>
+    <div class="menu-item" onclick="openSection('store', 'AvatarFrame', this)">⭕ Avatar Frame</div>
+
+    <div class="menu-label">Moderation & Level</div>
+    <div class="menu-item" onclick="openSection('generic', 'ReportedUser', this)">🚩 Reported User</div>
+    <div class="menu-item" onclick="openSection('generic', 'ComplainRequest', this)">❓ Complain Request</div>
+    <div class="menu-item" onclick="openSection('generic', 'Level', this)">📶 Level Management</div>
+
+    <div class="menu-label">Marketing & Role</div>
+    <div class="menu-item" onclick="openSection('generic', 'GoogleAd', this)">📢 Google Ad</div>
+    <div class="menu-item" onclick="openSection('generic', 'Language', this)">🌐 Language</div>
+    <div class="menu-item" onclick="openSection('generic', 'AccessRoles', this)">🛡️ Access Roles</div>
+    <div class="menu-item" onclick="openSection('generic', 'Staff', this)">👥 Staff</div>
+
     <div class="menu-label">System</div>
-    <div class="menu-item" onclick="showTab('settings', this)">⚙️ App Settings</div>
+    <div class="menu-item" onclick="openSection('settings', '', this)">⚙️ Setting & Password</div>
     <div class="menu-item" onclick="logoutAdmin()" style="color:#ef4444;">🚪 Logout</div>
   </div>
 
+  <!-- Top Bar with 3-Line Menu Button -->
+  <div class="topbar" id="topbar">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <button class="hamburger" onclick="toggleSidebar()">☰</button>
+      <b id="pageTitle" style="font-size:15px;">User Management</b>
+    </div>
+    <span style="font-size:12px; color:#ec4899; font-weight:bold;">HANA LIVE PANEL</span>
+  </div>
   <!-- Main Workspace -->
-  <div class="main">
+  <div class="main" id="main">
     <div class="stats-grid">
-      <div class="stat-card"><div><h3 id="statTotal">0</h3><p>Total Users</p></div><span>👥</span></div>
+      <div class="stat-card"><div><h3 id="statTotal">0</h3><p>Total User</p></div><span>👥</span></div>
       <div class="stat-card"><div><h3 id="statMale">0</h3><p>Male</p></div><span>♂️</span></div>
       <div class="stat-card"><div><h3 id="statFemale">0</h3><p>Female</p></div><span>♀️</span></div>
-      <div class="stat-card"><div><h3 id="statActive">0</h3><p>Active Users</p></div><span>🟢</span></div>
+      <div class="stat-card"><div><h3 id="statActive">0</h3><p>Total Active User</p></div><span>🟢</span></div>
     </div>
 
-    <!-- 1. Users -->
+    <!-- 1. USERS -->
     <div id="users" class="section active panel-box">
       <div class="toolbar">
-        <input type="text" id="userSearch" placeholder="Search Name or ID..." onkeyup="renderUsers()">
+        <input type="text" id="userSearch" placeholder="Search Name, ID..." onkeyup="renderUsers()">
         <select id="filterGender" onchange="renderUsers()">
-          <option value="">All Gender</option><option value="Male">Male</option><option value="Female">Female</option>
+          <option value="">Gender: All</option><option value="Male">Male</option><option value="Female">Female</option>
         </select>
-        <select id="filterType" onchange="renderUsers()">
-          <option value="">All Type</option><option value="Real">Real</option><option value="Fake">Fake (Bot)</option>
+        <select id="filterStatus" onchange="renderUsers()">
+          <option value="">Status: All</option><option value="Active">Active</option><option value="Banned">Banned</option><option value="Blacklist">Blacklist</option>
         </select>
         <select id="sortCoins" onchange="renderUsers()">
           <option value="">Sort Coins</option><option value="desc">High to Low</option><option value="asc">Low to High</option>
         </select>
-        <button class="btn btn-pink" onclick="addNewUserPrompt()">+ Add User / Bot</button>
+        <button class="btn btn-pink" onclick="addNewUserPrompt()">+ Add User</button>
       </div>
       <table>
-        <thead><tr><th>Image</th><th>Name</th><th>ID</th><th>Gender</th><th>Coins</th><th>Level</th><th>Status</th><th>Action</th></tr></thead>
+        <thead><tr><th>Image</th><th>Name & Info</th><th>Unique ID</th><th>Gender</th><th>Coins</th><th>Level</th><th>Status</th><th>Actions</th></tr></thead>
         <tbody id="userTableBody"></tbody>
       </table>
     </div>
 
-    <!-- 2. Gifts -->
+    <!-- 2. GIFTS -->
     <div id="gifts" class="section panel-box">
-      <h3>🎁 Manage Gifts & Coin Value</h3>
+      <h3>🎁 Gift & Category Management</h3>
       <div class="toolbar">
         <select id="gCat"><option>Classic</option><option>Luxury</option><option>Lucky</option><option>VIP</option></select>
         <input type="text" id="gName" placeholder="Gift Name">
@@ -91,9 +136,9 @@
       </table>
     </div>
 
-    <!-- 3. Room Themes -->
+    <!-- 3. THEMES -->
     <div id="themes" class="section panel-box">
-      <h3>🎨 Room Wallpapers / Themes</h3>
+      <h3>🎨 Room Themes & Wallpapers</h3>
       <div class="toolbar">
         <input type="text" id="tName" placeholder="Theme Name">
         <input type="text" id="tImg" placeholder="Wallpaper Image URL">
@@ -106,13 +151,13 @@
       </table>
     </div>
 
-    <!-- 4. Banners -->
+    <!-- 4. BANNERS -->
     <div id="banners" class="section panel-box">
-      <h3>🖼️ Home Screen Banners</h3>
+      <h3>🖼️ Home Banners</h3>
       <div class="toolbar">
         <input type="text" id="bTitle" placeholder="Banner Title">
         <input type="text" id="bImg" placeholder="Banner Image URL">
-        <input type="text" id="bLink" placeholder="Redirect Link">
+        <input type="text" id="bLink" placeholder="Action Link">
         <button class="btn btn-pink" onclick="saveBanner()">+ Add Banner</button>
       </div>
       <table>
@@ -121,9 +166,9 @@
       </table>
     </div>
 
-    <!-- 5. Store -->
+    <!-- 5. STORE -->
     <div id="store" class="section panel-box">
-      <h3>🚗 Store: Entry Effects & Avatar Frames</h3>
+      <h3 id="storeHeading">🚗 Store Management</h3>
       <div class="toolbar">
         <select id="sType"><option value="EntryEffect">Entry Effect</option><option value="AvatarFrame">Avatar Frame</option></select>
         <input type="text" id="sName" placeholder="Item Name">
@@ -138,13 +183,13 @@
       </table>
     </div>
 
-    <!-- 6. Engagement -->
+    <!-- 6. ENGAGEMENT -->
     <div id="engagement" class="section panel-box">
-      <h3>😊 Reactions, Messages & Broadcast</h3>
+      <h3 id="engHeading">😊 Engagement & Broadcast</h3>
       <div class="toolbar">
-        <select id="eType"><option value="Broadcast">Global Broadcast</option><option value="Reaction">Room Emoji</option><option value="QuickMsg">Suggested Msg</option></select>
-        <input type="text" id="eContent" placeholder="Text or Image URL" style="flex:1;">
-        <button class="btn btn-pink" onclick="saveEngagement()">+ Publish</button>
+        <select id="eType"><option value="Broadcast">Broadcast</option><option value="Reaction">Reaction</option><option value="QuickMsg">Suggested Message</option></select>
+        <input type="text" id="eContent" placeholder="Enter Text or Emoji URL" style="flex:1;">
+        <button class="btn btn-pink" onclick="saveEngagement()">+ Add</button>
       </div>
       <table>
         <thead><tr><th>Type</th><th>Content</th><th>Action</th></tr></thead>
@@ -152,9 +197,9 @@
       </table>
     </div>
 
-    <!-- 7. Coin Plans -->
+    <!-- 7. PLANS -->
     <div id="plans" class="section panel-box">
-      <h3>💎 Coin Recharge Plans</h3>
+      <h3>💎 Coin Plans</h3>
       <div class="toolbar">
         <input type="number" id="pCoins" placeholder="Coins">
         <input type="number" id="pPrice" placeholder="Price INR">
@@ -167,13 +212,27 @@
       </table>
     </div>
 
-    <!-- 8. Settings -->
-    <div id="settings" class="section panel-box">
-      <h3>⚙️ System & Password Settings</h3>
-      <p style="font-size:12px; color:#94a3b8;">Password badalne ke liye Key mein <b>AdminPass</b> likhein aur Value mein naya password daalein.</p>
+    <!-- 8. GENERIC MODULES -->
+    <div id="generic" class="section panel-box">
+      <h3 id="genHeading">Module Manager</h3>
       <div class="toolbar">
-        <input type="text" id="setKey" placeholder="Key (e.g. AdminPass)">
-        <input type="text" id="setVal" placeholder="Value (e.g. newpass123)">
+        <input type="text" id="genTitle" placeholder="Title / Name / ID">
+        <input type="text" id="genValue" placeholder="Details / URL / Amount" style="flex:1;">
+        <button class="btn btn-pink" onclick="saveGeneric()">+ Add Record</button>
+      </div>
+      <table>
+        <thead><tr><th>ID</th><th>Category</th><th>Title / Name</th><th>Details / Value</th><th>Action</th></tr></thead>
+        <tbody id="genTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- 9. SETTINGS -->
+    <div id="settings" class="section panel-box">
+      <h3>⚙️ System & Admin Login Credentials</h3>
+      <p style="font-size:12px; color:#94a3b8;">Login ID badalne ke liye Key: <b>AdminUser</b> aur Password badalne ke liye Key: <b>AdminPass</b> save karein.</p>
+      <div class="toolbar">
+        <input type="text" id="setKey" placeholder="Key (AdminUser / AdminPass)">
+        <input type="text" id="setVal" placeholder="New Value">
         <button class="btn btn-primary" onclick="saveSetting()">Save Setting</button>
       </div>
       <table>
