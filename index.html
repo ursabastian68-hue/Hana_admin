@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Haco Master Admin Panel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Login Lock Screen -->
+  <div id="loginOverlay">
+    <div class="login-box">
+      <h2 style="margin-top:0; color:#fff;">❖ <span style="color:#ec4899;">HACO</span> ADMIN</h2>
+      <p style="color:#64748b; font-size:13px; margin-bottom:20px;">Admin Control Panel mein Login karein</p>
+      <input type="text" id="adminUser" placeholder="Admin Username (admin)">
+      <input type="password" id="adminPass" placeholder="Password (haco@2026)">
+      <button class="btn btn-pink" onclick="checkLogin()" style="width:100%; padding:11px; font-size:14px;">Login</button>
+      <p id="loginErr" style="color:#ef4444; font-size:12px; margin-top:10px; display:none;">Galat Username ya Password!</p>
+    </div>
+  </div>
+
+  <!-- Sidebar Menu -->
+  <div class="sidebar">
+    <div class="brand">❖ <span>HACO</span> ADMIN</div>
+    
+    <div class="menu-label">User Management</div>
+    <div class="menu-item active" onclick="showTab('users', this)">👥 Users (Real/Bot)</div>
+    <div class="menu-item" onclick="showTab('plans', this)">💎 Coin Plans</div>
+    
+    <div class="menu-label">Engagement</div>
+    <div class="menu-item" onclick="showTab('gifts', this)">🎁 Gifts & Value</div>
+    <div class="menu-item" onclick="showTab('engagement', this)">😊 Reactions & Broadcast</div>
+    
+    <div class="menu-label">Content Management</div>
+    <div class="menu-item" onclick="showTab('banners', this)">🖼️ Banners</div>
+    <div class="menu-item" onclick="showTab('themes', this)">🎨 Room Themes</div>
+    
+    <div class="menu-label">Store & Features</div>
+    <div class="menu-item" onclick="showTab('store', this)">🚗 Entry & Frames</div>
+    
+    <div class="menu-label">System</div>
+    <div class="menu-item" onclick="showTab('settings', this)">⚙️ App Settings</div>
+    <div class="menu-item" onclick="logoutAdmin()" style="color:#ef4444;">🚪 Logout</div>
+  </div>
+
+  <!-- Main Workspace -->
+  <div class="main">
+    <div class="stats-grid">
+      <div class="stat-card"><div><h3 id="statTotal">0</h3><p>Total Users</p></div><span>👥</span></div>
+      <div class="stat-card"><div><h3 id="statMale">0</h3><p>Male</p></div><span>♂️</span></div>
+      <div class="stat-card"><div><h3 id="statFemale">0</h3><p>Female</p></div><span>♀️</span></div>
+      <div class="stat-card"><div><h3 id="statActive">0</h3><p>Active Users</p></div><span>🟢</span></div>
+    </div>
+
+    <!-- 1. Users -->
+    <div id="users" class="section active panel-box">
+      <div class="toolbar">
+        <input type="text" id="userSearch" placeholder="Search Name or ID..." onkeyup="renderUsers()">
+        <select id="filterGender" onchange="renderUsers()">
+          <option value="">All Gender</option><option value="Male">Male</option><option value="Female">Female</option>
+        </select>
+        <select id="filterType" onchange="renderUsers()">
+          <option value="">All Type</option><option value="Real">Real</option><option value="Fake">Fake (Bot)</option>
+        </select>
+        <select id="sortCoins" onchange="renderUsers()">
+          <option value="">Sort Coins</option><option value="desc">High to Low</option><option value="asc">Low to High</option>
+        </select>
+        <button class="btn btn-pink" onclick="addNewUserPrompt()">+ Add User / Bot</button>
+      </div>
+      <table>
+        <thead><tr><th>Image</th><th>Name</th><th>ID</th><th>Gender</th><th>Coins</th><th>Level</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="userTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- 2. Gifts -->
+    <div id="gifts" class="section panel-box">
+      <h3>🎁 Manage Gifts & Coin Value</h3>
+      <div class="toolbar">
+        <select id="gCat"><option>Classic</option><option>Luxury</option><option>Lucky</option><option>VIP</option></select>
+        <input type="text" id="gName" placeholder="Gift Name">
+        <input type="number" id="gPrice" placeholder="Coin Value">
+        <input type="text" id="gIcon" placeholder="Icon Image URL">
+        <input type="text" id="gSvga" placeholder="SVGA / JSON URL">
+        <button class="btn btn-pink" onclick="saveGift()">+ Add Gift</button>
+      </div>
+      <table>
+        <thead><tr><th>Icon</th><th>Category</th><th>Name</th><th>Coins</th><th>Action</th></tr></thead>
+        <tbody id="giftTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- 3. Room Themes -->
+    <div id="themes" class="section panel-box">
+      <h3>🎨 Room Wallpapers / Themes</h3>
+      <div class="toolbar">
+        <input type="text" id="tName" placeholder="Theme Name">
+        <input type="text" id="tImg" placeholder="Wallpaper Image URL">
+        <input type="number" id="tPrice" placeholder="Coin Price">
+        <button class="btn btn-pink" onclick="saveTheme()">+ Add Theme</button>
+      </div>
+      <table>
+        <thead><tr><th>Preview</th><th>Name</th><th>Price</th><th>Action</th></tr></thead>
+        <tbody id="themeTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- 4. Banners -->
+    <div id="banners" class="section panel-box">
+      <h3>🖼️ Home Screen Banners</h3>
+      <div class="toolbar">
+        <input type="text" id="bTitle" placeholder="Banner Title">
+        <input type="text" id="bImg" placeholder="Banner Image URL">
+        <input type="text" id="bLink" placeholder="Redirect Link">
+        <button class="btn btn-pink" onclick="saveBanner()">+ Add Banner</button>
+      </div>
+      <table>
+        <thead><tr><th>Banner</th><th>Title</th><th>Link</th><th>Action</th></tr></thead>
+        <tbody id="bannerTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- 5. Store -->
+    <div id="store" class="section panel-box">
+      <h3>🚗 Store: Entry Effects & Avatar Frames</h3>
+      <div class="toolbar">
+        <select id="sType"><option value="EntryEffect">Entry Effect</option><option value="AvatarFrame">Avatar Frame</option></select>
+        <input type="text" id="sName" placeholder="Item Name">
+        <input type="text" id="sImg" placeholder="Preview Image URL">
+        <input type="text" id="sSvga" placeholder="SVGA URL">
+        <input type="number" id="sPrice" placeholder="Coins">
+        <button class="btn btn-pink" onclick="saveStore()">+ Add Item</button>
+      </div>
+      <table>
+        <thead><tr><th>Preview</th><th>Type</th><th>Name</th><th>Coins</th><th>Action</th></tr></thead>
+        <tbody id="storeTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- 6. Engagement -->
+    <div id="engagement" class="section panel-box">
+      <h3>😊 Reactions, Messages & Broadcast</h3>
+      <div class="toolbar">
+        <select id="eType"><option value="Broadcast">Global Broadcast</option><option value="Reaction">Room Emoji</option><option value="QuickMsg">Suggested Msg</option></select>
+        <input type="text" id="eContent" placeholder="Text or Image URL" style="flex:1;">
+        <button class="btn btn-pink" onclick="saveEngagement()">+ Publish</button>
+      </div>
+      <table>
+        <thead><tr><th>Type</th><th>Content</th><th>Action</th></tr></thead>
+        <tbody id="engTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- 7. Coin Plans -->
+    <div id="plans" class="section panel-box">
+      <h3>💎 Coin Recharge Plans</h3>
+      <div class="toolbar">
+        <input type="number" id="pCoins" placeholder="Coins">
+        <input type="number" id="pPrice" placeholder="Price INR">
+        <input type="number" id="pBonus" placeholder="Bonus Coins">
+        <button class="btn btn-pink" onclick="savePlan()">+ Add Plan</button>
+      </div>
+      <table>
+        <thead><tr><th>Coins</th><th>Price</th><th>Bonus</th><th>Action</th></tr></thead>
+        <tbody id="planTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- 8. Settings -->
+    <div id="settings" class="section panel-box">
+      <h3>⚙️ System & Password Settings</h3>
+      <p style="font-size:12px; color:#94a3b8;">Password badalne ke liye Key mein <b>AdminPass</b> likhein aur Value mein naya password daalein.</p>
+      <div class="toolbar">
+        <input type="text" id="setKey" placeholder="Key (e.g. AdminPass)">
+        <input type="text" id="setVal" placeholder="Value (e.g. newpass123)">
+        <button class="btn btn-primary" onclick="saveSetting()">Save Setting</button>
+      </div>
+      <table>
+        <thead><tr><th>Key</th><th>Value</th><th>Action</th></tr></thead>
+        <tbody id="setTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
